@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+   xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Bundle Name="Bootstrapper" Version="1.0.0.0" Manufacturer="Billy"
+          UpgradeCode="4a2346e9-a126-43fb-a352-05a95623e0d4">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+    <Chain>
+
+      <PackageGroupRef Id="Netfx4Full"/>
+      <PackageGroupRef Id="SQLExpressCE"/>
+
+      <!-- Install Application -->
+      <MsiPackage Id="MyApplication" SourceFile="$(var.Installer.TargetPath)"/>
+
+    </Chain>
+  </Bundle>
+
+  <Fragment>
+    <!-- Check for .NET 4.0 -->
+    <util:RegistrySearch Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full"
+                         Value="Version"
+                         Variable="Netfx4FullVersion" />
+    <util:RegistrySearch Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full"
+                         Value="Version"
+                         Variable="Netfx4x64FullVersion"
+                         Win64="yes" />
+
+    <!-- Install .NEt 4.0 -->
+    <PackageGroup Id="Netfx4Full">
+      <ExePackage Id="Netfx4Full"
+                  DisplayName="Microsoft .NET Framework 4.0"
+                  Compressed="no"
+                  Cache="yes"
+                  PerMachine="yes"
+                  Permanent="yes"
+                  Protocol="netfx4"
+                  Vital="yes"
+                  SourceFile=".\prerequisites\dotNetFx40_Full_x86_x64.exe"
+                  InstallCommand="/passive /norestart"
+                  DetectCondition="Netfx4FullVersion AND (NOT VersionNT64 OR Netfx4x64FullVersion)" />
+    </PackageGroup>
+
+    <!-- Install SQL Server CE -->
+    <PackageGroup Id="SQLExpressCE">
+      <MsiPackage
+                Cache="no"
+                Compressed="no"
+                ForcePerMachine="yes"
+                Permanent="yes"
+                Vital="yes"
+                SourceFile=".\prerequisites\SSCERuntime-ENU.msi"
+                InstallCondition="NOT VersionNT64 AND SqlInstance AND SqlServerInstalled AND SQLServer2008R2Installed" />
+      <MsiPackage
+                Cache="no"
+                Compressed="no"
+                ForcePerMachine="yes"
+                Permanent="yes"
+                Vital="yes"
+                SourceFile=".\prerequisites\SSCERuntime-ENU-x64.msi"
+                InstallCondition="VersionNT64 AND NOT SqlInstance AND SqlServerInstalled AND SQLServer2008R2Installed" />
+    </PackageGroup>
+
+    <PackageGroup Id="SQLExpressCE">
+      <ExePackage
+                Cache="no"
+                Compressed="no"
+                Permanent="no"
+                Vital="yes"
+                InstallCommand="/QS /ACTION=Install /IACCEPTSQLSERVERLICENSETERMS /BROWSERSVCSTARTUPTYPE=Automatic /SQLSVCSTARTUPTYPE=Automatic /FEATURES=SQL /INSTANCENAME=SQLEXPRESS /SQLSVCACCOUNT=&quot;NT AUTHORITY\Network Service&quot; /SQLSYSADMINACCOUNTS=&quot;BUILTIN\ADMINISTRATORS&quot; /AGTSVCACCOUNT=&quot;NT AUTHORITY\Network Service&quot; /SECURITYMODE=SQL /SAPWD=&quot;wegamed&quot;"
+                SourceFile=".\prerequisites\SQLEXPR32_x86_ENU.EXE"
+                DownloadUrl="http://download.microsoft.com/download/D/1/8/D1869DEC-2638-4854-81B7-0F37455F35EA/SQLEXPR_x86_ENU.exe"
+                InstallCondition="NOT SQLServer2008R2Installed AND NOT SQLServerInstalled" />
+      <ExePackage DetectCondition="VersionNT64"
+                Cache="no"
+                Compressed="no"
+                Permanent="no"
+                Vital="yes"
+                InstallCommand="/QS /ACTION=Install /IACCEPTSQLSERVERLICENSETERMS /BROWSERSVCSTARTUPTYPE=Automatic /SQLSVCSTARTUPTYPE=Automatic /FEATURES=SQL /INSTANCENAME=SQLEXPRESS /SQLSVCACCOUNT=&quot;NT AUTHORITY\Network Service&quot; /SQLSYSADMINACCOUNTS=&quot;BUILTIN\ADMINISTRATORS&quot; /AGTSVCACCOUNT=&quot;NT AUTHORITY\Network Service&quot; /SECURITYMODE=SQL /SAPWD=&quot;wegamed&quot;"
+                SourceFile=".\prerequisites\SQLEXPR_x64_ENU.EXE"
+                DownloadUrl="http://download.microsoft.com/download/D/1/8/D1869DEC-2638-4854-81B7-0F37455F35EA/SQLEXPR_x86_ENU.exe"
+                InstallCondition="NOT SQLServer2008R2Installed AND NOT SQLServerInstalled" />
+    </PackageGroup>
+  </Fragment>
+</Wix>
+
+
+<Property Id="SQLSERVER_INSTANCE">
+  <RegistrySearch Id="SQLServerRegSearch" Root="HKLM" Key="SOFTWARE\Microsoft\Microsoft Sql Server\Instance Names\SQL" Type="raw" Name="SQLEXPRESS"/>
+</Property>
+
+<!-- Read SQL Server keys to find current instance and version -->
+<util:RegistrySearch
+  Id="SqlInstanceKeyFound"
+  Root="HKLM" Key="SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL" Value="$(var.InstanceName)"
+  Result="exists" Variable="SqlInstanceKeyFound" />
+<util:RegistrySearch
+  Id="SqlInstanceKey"
+  Root="HKLM" Key="SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL" Value="$(var.InstanceName)"
+  Variable="SqlInstanceKey" After="SqlInstanceKeyFound" Condition="SqlInstanceKeyFound" />
+<util:RegistrySearch
+  Id="SqlInstanceFound"
+  Root="HKLM" Key="SOFTWARE\Microsoft\Microsoft SQL Server\[SqlInstanceKey]"
+  Result="exists" Variable="SqlInstanceFound" After="SqlInstanceKey" Condition="SqlInstanceKeyFound" />
+<util:RegistrySearch
+  Id="SqlVersion"
+  Root="HKLM" Key="SOFTWARE\Microsoft\Microsoft SQL Server\[SqlInstanceKey]\Setup" Value="Version"
+  Variable="SqlVersion" After="SqlInstanceKey" Condition="SqlInstanceFound" />
+
+<PackageGroup Id="Sql2012Express">
+  <ExePackage Id="Sql2012Express"
+    DisplayName="SQL Server 2012 Express"
+    Cache="yes"
+    Compressed="no"
+    PerMachine="yes"
+    Permanent="no"
+    Vital="yes"
+    Name="Redist\SQLEXPR_x86_ENU.exe"
+    SourceFile="..\Packages\SQLEXPR_x86_ENU.exe"
+    DownloadUrl="$(var.SqlWebLink)"
+    InstallCommand="/ACTION=Install /INSTANCENAME=$(var.InstanceName) /FEATURES=SQL /SECURITYMODE=SQL [SqlVariable] /TCPENABLED=1 /SQLSVCACCOUNT=&quot;NT AUTHORITY\NETWORK SERVICE&quot; /SQLSVCSTARTUPTYPE=Manual /SQLSYSADMINACCOUNTS=BUILTIN\Administrators /ADDCURRENTUSERASSQLADMIN=FALSE /Q /HIDECONSOLE /SkipRules=RebootRequiredCheck /IAcceptSQLServerLicenseTerms"
+    UninstallCommand="/Action=Uninstall /INSTANCENAME=$(var.InstanceName) /FEATURES=SQL /Q /HIDECONSOLE"
+    DetectCondition="SqlInstanceFound"
+    InstallCondition="$(var.ServerInstall)">
+    <ExitCode Value ="3010" Behavior="forceReboot" />
+    <dep:Provides DisplayName="Net2 SQL Server 2012 Express" Key="SQLServer2012Express,$(var.InstanceName)" Version="11.0.3000.0" />
+  </ExePackage>
+</PackageGroup>
+
+<![CDATA[SQLSERVER_INSTANCE]]>
+</Condition>

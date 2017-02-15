@@ -1,0 +1,2 @@
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.wixpdb

@@ -1,0 +1,5 @@
+E:\CHAI.Projects\lqtv.02\LQT.Installer\bin\Debug\ForLAB Installer.msi
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\dotNetFx40_Full_x86_x64.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\ReportViewer.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\SQLExpr32_x86_enu.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\SQLExpr_x64_enu.exe

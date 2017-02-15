@@ -1,0 +1,2 @@
+E:\CHAI.Projects\lqtv.02\LQT.Installer\bin\Debug\ForLAB Installer.msi
+E:\CHAI.Projects\lqtv.02\LQT.Installer\bin\Debug\ForLAB Installer.wixpdb

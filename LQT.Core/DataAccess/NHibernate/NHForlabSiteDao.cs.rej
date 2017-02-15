@@ -1,0 +1,9 @@
+diff a/LQT.Core/DataAccess/NHibernate/NHForlabSiteDao.cs b/LQT.Core/DataAccess/NHibernate/NHForlabSiteDao.cs	(rejected hunks)
+@@ -106,6 +106,7 @@
+                     "SiteInstrument.InstrumentID = Instrument.InstrumentID INNER JOIN Site ON " +
+                     "SiteInstrument.SiteID = Site.SiteID WHERE ");
+                 if(platform=="CD4" || platform==forcd4)
++                    sql += string.Format(" REPLACE(dbo.TestingArea.AreaName, ' ', '') Like'%{1}%' OR REPLACE(dbo.TestingArea.AreaName, ' ', '') Like'%{2}%'  AND Site.RegionID = {0}", regionid, platform,forcd4);
+                 else
+                     sql += string.Format(" REPLACE(dbo.TestingArea.AreaName, ' ', '') Like'%{1}%' AND Site.RegionID = {0}", regionid, platform);
+             }

@@ -1,0 +1,6 @@
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\dotNetFx40_Full_x86_x64.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ReportViewer.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\SQLExpr32_x86_enu.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\SQLExpr_x64_enu.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.wixpdb

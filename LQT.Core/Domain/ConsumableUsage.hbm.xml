@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class name="LQT.Core.Domain.ConsumableUsage, LQT.Core" table="ConsumableUsage">
+    
+    <id name="Id" type="Int32" unsaved-value="-1">
+      <column name="Id" length="4" sql-type="int"/>
+      <generator class="native" />
+    </id>
+
+    <property name="PerTest" type="Boolean" column="PerTest" />
+    <property name="PerPeriod" type="Boolean" column="PerPeriod" />
+    <property name="PerInstrument" type="Boolean" column="PerInstrument" />
+    <property name="NoOfTest" type="int" column="NoOfTest"/>
+    <property name="TestingAreaId" type="int" column="TestingAreaId"/>
+    <property name="TestId" type="int" column="TestId"/>
+    <property name="ProductUsageRate" type="Decimal" column="UsageRate"/>
+    <property name="Period" type="string" column="Period"/>
+    <property name="QuanifyBasedOn" type="string" column="QuanifyBasedOn"/>
+    
+    <many-to-one name="Product" class="LQT.Core.Domain.MasterProduct, LQT.Core" column="ProductId" />
+    <many-to-one name="Instrument" class="LQT.Core.Domain.Instrument, LQT.Core" column="InstrumentId"/>
+
+  </class>
+</hibernate-mapping>

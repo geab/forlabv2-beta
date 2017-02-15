@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+  <Bundle Copyright="Copyright© 2014, Chris Schiffhauer"
+      Manufacturer="Chris Schiffhauer"
+      Name="Chris's Application"
+      UpgradeCode="{INSERT-YOUR-GUID-HERE}"
+      Version="!(bind.packageVersion.SetupPackageId)">
+
+    <Variable Name="Checkbox1" Value="1" />
+    <Variable Name="Checkbox2" Value="1" />
+
+    <BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
+      <Payload Name="baextca.dll" Compressed="yes" SourceFile="baextca.dll" />
+      <Payload SourceFile="Resource\Logo.png" />
+    </BootstrapperApplicationRef>
+
+    <WixVariable Id="WixExtbaLicenseUrl" Value="License.htm" />
+
+    <Chain>
+      <PackageGroupRef Id="SQLServerExpress" />
+      <MsiPackage Cache="no"
+                  Description="Installing Chris's Application"
+                  Id="SetupPackageId"
+                  SourceFile="..\..\..\Setup\bin\$(var.Configuration)\Setup.msi"
+                  InstallCondition="Checkbox2 = 1" />
+    </Chain>
+  </Bundle>
+  <Fragment>
+    <?define InstanceName = "SQLEXPRESS" ?>
+    <WixVariable Id="WixExtbaThemeXml" Value="Resource\BundleTheme.xml" />
+    <WixVariable Id="WixExtbaThemeWxl" Value="Resource\HyperlinkTheme.wxl" />
+    <util:RegistrySearch Id="SqlInstanceKeyFound"
+                         Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL"
+                         Value="$(var.InstanceName)"
+                         Result="exists"
+                         Variable="SqlInstanceKeyFound" />
+    <util:RegistrySearch Id="SqlInstanceKey"
+                         Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL"
+                         Value="$(var.InstanceName)"
+                         Variable="SqlInstanceKey"
+                         After="SqlInstanceKeyFound"
+                         Condition="SqlInstanceKeyFound" />
+    <util:RegistrySearch Id="SqlInstanceFound"
+                         Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Microsoft SQL Server\[SqlInstanceKey]"
+                         Result="exists"
+                         Variable="SqlInstanceFound"
+                         After="SqlInstanceKey"
+                         Condition="SqlInstanceKeyFound" />
+    <util:RegistrySearch Id="SqlVersion"
+                         Root="HKLM"
+                         Key="SOFTWARE\Microsoft\Microsoft SQL Server\[SqlInstanceKey]\Setup"
+                         Value="Version"
+                         Variable="SqlVersion"
+                         After="SqlInstanceKey"
+                         Condition="SqlInstanceFound" />
+    <PackageGroup Id="SQLServerExpress">
+      <ExePackage Compressed="yes"
+                  DetectCondition="SqlInstanceFound"
+                  DisplayName="Installing SQL Server Express 2012"
+                  Id="SQLServerExpressInstall"
+                  InstallCommand='/IACCEPTSQLSERVERLICENSETERMS /HIDECONSOLE /INSTANCEID="SQLEXPRESS" /ACTION="Install" /FEATURES=SQLENGINE /HELP="False" /INDICATEPROGRESS="False" /QUIET="True" /QUIETSIMPLE="False" /X86="True" /ERRORREPORTING="False" /SQMREPORTING="False" /INSTANCENAME="SQLEXPRESS" /AGTSVCSTARTUPTYPE="Manual" /ISSVCSTARTUPTYPE="Automatic" /ISSVCACCOUNT="NT AUTHORITY\NetworkService" /ASSVCSTARTUPTYPE="Automatic" /ASCOLLATION="Latin1_General_CI_AS" /ASDATADIR="Data" /ASLOGDIR="Log" /ASBACKUPDIR="Backup" /ASTEMPDIR="Temp" /ASCONFIGDIR="Config" /ASPROVIDERMSOLAP="1" /SQLSVCSTARTUPTYPE="Automatic" /FILESTREAMLEVEL="0" /ENABLERANU="True" /SQLCOLLATION="SQL_Latin1_General_CP1_CI_AS" /SQLSVCACCOUNT="NT AUTHORITY\NETWORK SERVICE" /ADDCURRENTUSERASSQLADMIN="True" /TCPENABLED="0" /NPENABLED="0" /BROWSERSVCSTARTUPTYPE="Disabled" /RSSVCSTARTUPTYPE="Automatic" /RSINSTALLMODE="FilesOnlyMode" /SECURITYMODE=SQL /SAPWD="R3nbeck0011!"'
+                  InstallCondition="Checkbox1 = 1"
+                  Permanent="yes"
+                  Name="Installing SQL Server Express 2012"
+                  SourceFile="Resource\SQLEXPR_x86_ENU.exe"
+                  Vital="yes" />
+      <ExePackage Compressed="yes"
+                  DetectCondition="NOT (SqlInstanceFound AND (SqlVersion &lt; v11.0.0.0))"
+                  DisplayName="Upgrading SQL Server to SQL Server Express 2008 R2..."
+                  Id="SQLServerExpressUpgrade"
+                  InstallCommand='/IACCEPTSQLSERVERLICENSETERMS /HIDECONSOLE /ACTION="Upgrade" /QUIET="True" /INSTANCENAME="SQLEXPRESS" /SkipRules=RebootRequiredCheck'
+                  InstallCondition="Checkbox1 = 1"
+                  Permanent="yes"
+                  Name="Upgrading SQL Express to SQL Server Express 2012"
+                  SourceFile="Resource\SQLEXPR_x86_ENU.exe"
+                  Vital="yes" />
+    </PackageGroup>
+  </Fragment>
+</Wix>

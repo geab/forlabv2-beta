@@ -1,0 +1,16 @@
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\dotNetFx40_Full_x86_x64.exe
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\ReportViewer.exe
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\SQLExpr32_x86_enu.exe
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\SQLExpr_x64_enu.exe
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\ForeLAB.exe
+D:\CHAIWORKSPACE\lqt\LQTBootstrapper\bin\Debug\ForeLAB.wixpdb
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\dotNetFx40_Full_x86_x64.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ReportViewer.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\SQLExpr32_x86_enu.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\SQLExpr_x64_enu.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.exe
+E:\CHAI.Projects\lqtv.02\LQTBootstrapper\bin\Debug\ForLAB.wixpdb
+obj\Debug\Bundle.wixobj
+obj\Debug\LQTBootstrapper.wixproj.BindContentsFileList.txt
+obj\Debug\LQTBootstrapper.wixproj.BindOutputsFileList.txt
+obj\Debug\LQTBootstrapper.wixproj.BindBuiltOutputsFileList.txt

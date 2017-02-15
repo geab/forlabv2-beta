@@ -1,0 +1,6 @@
+E:\CHAI.Projects\lqtv.02\LQT.Installer\bin\Debug\ForLAB Installer.msi
+E:\CHAI.Projects\lqtv.02\LQT.Installer\bin\Debug\ForLAB Installer.wixpdb
+obj\Debug\ForLab.wixobj
+obj\Debug\LQT.Installer.wixproj.BindContentsFileListnull.txt
+obj\Debug\LQT.Installer.wixproj.BindOutputsFileListnull.txt
+obj\Debug\LQT.Installer.wixproj.BindBuiltOutputsFileListnull.txt
